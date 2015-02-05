@@ -1,0 +1,23 @@
+{
+	"name": "fg/nokogiri",
+	"description": "Cuts through XML like a breeze.",
+	"version": "0.1.0",
+	"authors": [{
+		"name": "Félix Girault",
+		"email": "felix.girault@gmail.com",
+		"homepage": "http://www.felix-girault.fr",
+		"role": "Developer"
+	}],
+	"keywords": [
+		"xml",
+		"cut",
+		"truncate"
+	],
+	"license": "MIT",
+	"homepage": "http://github.com/felixgirault/essence",
+	"autoload": {
+		"psr-4": {
+			"Nokogiri\\": "src/"
+		}
+	}
+}
