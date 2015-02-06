@@ -25,7 +25,7 @@ Would return:
 
 ```xml
 <p>
-	<span>Lorem ipsum dolor <em>sit</em>.</span>
+	<span>Lorem ipsum dolor <em>sit</em></span>
 </p>
 ```
 
