@@ -14,9 +14,10 @@ class Nokogiri {
 	/**
 	 *
 	 */
-	public function cut($xml, $limit) {
+	public function cut($xml, $limit, $trim = true) {
 		$Parser = new Parser();
 		$opened = [];
+		$count = 0;
 		$position = 0;
 
 		$Parser->on(
@@ -28,15 +29,25 @@ class Nokogiri {
 
 		$Parser->on(
 			Parser::PARSED_TAG_CONTENTS_EVENT,
-			function($contents, $i) use (&$opened, &$count, &$position, $limit) {
-				if ($this->_isWhitespace($contents)) {
+			function($contents, $i) use (&$opened, &$count, &$position, $limit, $trim) {
+				$length = strlen($contents);
+				$offset = 0;
+
+				if ($length && $trim) {
+					$contents = ltrim($contents);
+					$offset = $length - strlen($contents);
+					$contents = rtrim($contents);
+					$length = strlen($contents);
+				}
+
+				if ($length === 0) {
 					return;
 				}
 
-				$count += strlen($contents);
+				$count += $length;
 
 				if ($count >= $limit) {
-					$position = $i - ($count - $limit);
+					$position = $i - ($count - $limit) - $offset;
 					return false;
 				}
 			}
@@ -54,13 +65,6 @@ class Nokogiri {
 		return $position
 			? $this->_enclose($xml, $position, $opened)
 			: $xml;
-	}
-
-	/**
-	 *
-	 */
-	protected function _isWhitespace($string) {
-		return preg_match('~\s+~i', $string);
 	}
 
 	/**

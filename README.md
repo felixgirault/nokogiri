@@ -45,19 +45,6 @@ Would return:
 
 Note that the blank characters between tags are not taken into account.
 
-Pitfalls
---------
-
-For now, Nokogori won't work properly with string that are not enclosed
-in a proper tag, like that:
-
-```xml
-<p>
-	Some unenclosed string
-	<span>Lorem ipsum</span>
-</p>
-```
-
 Notes
 -----
 
