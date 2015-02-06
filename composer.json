@@ -1,7 +1,6 @@
 {
 	"name": "fg/nokogiri",
 	"description": "Cuts through XML like a breeze.",
-	"version": "0.1.0",
 	"authors": [{
 		"name": "Félix Girault",
 		"email": "felix.girault@gmail.com",
