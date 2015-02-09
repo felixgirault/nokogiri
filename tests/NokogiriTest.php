@@ -94,4 +94,31 @@ XML;
 			$this->Nokogiri->cut($xml, 11)
 		);
 	}
+
+	/**
+	 *
+	 */
+	public function testDocx() {
+		$xml = <<<XML
+			<w:r>
+				<w:rPr>
+					<w:b w:val="1" />
+				</w:rPr>
+				<w:t xml:space="preserve">lorem ipsum</w:t>
+			</w:r>
+XML;
+
+		$expected = <<<XML
+			<w:r>
+				<w:rPr>
+					<w:b w:val="1" />
+				</w:rPr>
+				<w:t xml:space="preserve">lorem</w:t></w:r>
+XML;
+
+		$this->assertEquals(
+			$expected,
+			$this->Nokogiri->cut($xml, 5)
+		);
+	}
 }

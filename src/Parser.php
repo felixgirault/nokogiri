@@ -109,7 +109,6 @@ class Parser {
 	 */
 	protected function _parseOpeningTag($char) {
 		switch ($char) {
-			// we're in fact parsing a closing tag
 			case '/':
 				$this->_state = empty($this->_tagName)
 					? self::PARSING_CLOSING_TAG
@@ -118,22 +117,16 @@ class Parser {
 				$this->_tagName = '';
 				break;
 
-			// we're beggining to parse attributes
-			// we know the name of the tag we just opened
 			case ' ':
 				$this->_state = self::PARSING_TAG_ATTRIBUTES;
 				break;
 
-			// we're reaching the end of an opening tag
-			// we know the name of the tag we just opened
-			// we can begin to store the tag's contents for later use
 			case '>':
 				$this->_state = self::PARSING_TAG_CONTENTS;
 				$this->_emit(self::OPENED_TAG_EVENT, $this->_tagName);
 				$this->_tagName = '';
 				break;
 
-			// we're storing the tag's name for later use
 			default:
 				$this->_tagName .= $char;
 				break;
@@ -145,18 +138,14 @@ class Parser {
 	 */
 	protected function _parseTagAttributes($char) {
 		switch ($char) {
-			// we're in fact parsing a closing tag
 			case '/':
 				$this->_state = self::PARSING_SELF_CLOSING_TAG;
 				break;
 
-			// we're reaching the end of an opening tag
-			// we can begin to store the tag's contents for later use
 			case '>':
 				$this->_state = self::PARSING_TAG_CONTENTS;
 				$this->_emit(self::OPENED_TAG_EVENT, $this->_tagName);
 				$this->_tagName = '';
-				$this->_contents = '';
 				break;
 		}
 	}
@@ -166,15 +155,12 @@ class Parser {
 	 */
 	protected function _parseTagContents($char, $i) {
 		switch ($char) {
-			// we're reaching the start of a tag
-			// we can begin to store the tag's name for later use
 			case '<':
 				$this->_state = self::PARSING_OPENING_TAG;
 				$this->_emit(self::PARSED_TAG_CONTENTS_EVENT, $this->_contents, $i);
 				$this->_contents = '';
 				break;
 
-			// we're storing the tag's contents for later use
 			default:
 				$this->_contents .= $char;
 				break;
@@ -186,10 +172,10 @@ class Parser {
 	 */
 	protected function _parseClosingTag($char) {
 		switch ($char) {
-			// we're reaching the end of a closing tag
 			case '>':
 				$this->_state = self::PARSING_TAG_CONTENTS;
-				$this->_emit(self::CLOSED_TAG_EVENT);
+				$this->_emit(self::CLOSED_TAG_EVENT, $this->_tagName);
+				$this->_tagName = '';
 				break;
 		}
 	}
@@ -199,9 +185,15 @@ class Parser {
 	 */
 	protected function _parseSelfClosingTag($char) {
 		switch ($char) {
-			// we're reaching the end of a self closing tag
 			case '>':
 				$this->_state = self::PARSING_TAG_CONTENTS;
+				$this->_emit(self::OPENED_TAG_EVENT, $this->_tagName);
+				$this->_emit(self::CLOSED_TAG_EVENT, $this->_tagName);
+				$this->_tagName = '';
+				break;
+
+			default:
+				$this->_tagName .= $char;
 				break;
 		}
 	}
