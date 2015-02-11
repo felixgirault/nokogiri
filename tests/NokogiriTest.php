@@ -43,8 +43,8 @@ XML;
 XML;
 
 		$this->assertEquals(
-			$expected,
-			$this->Nokogiri->cut($xml, 10)
+			new SimpleXMLElement($expected),
+			new SimpleXMLElement($this->Nokogiri->cut($xml, 10))
 		);
 	}
 
@@ -56,8 +56,8 @@ XML;
 		$expected = '<p> <span> Te</span></p>';
 
 		$this->assertEquals(
-			$expected,
-			$this->Nokogiri->cut($xml, 4, false)
+			new SimpleXMLElement($expected),
+			new SimpleXMLElement($this->Nokogiri->cut($xml, 4, false))
 		);
 	}
 
@@ -69,8 +69,8 @@ XML;
 		$expected = '<p>This <em>is</em> a</p>';
 
 		$this->assertEquals(
-			$expected,
-			$this->Nokogiri->cut($xml, 8)
+			new SimpleXMLElement($expected),
+			new SimpleXMLElement($this->Nokogiri->cut($xml, 8))
 		);
 	}
 
@@ -82,16 +82,16 @@ XML;
 		$expected = '<p>Lorem<br /> ipsum</p>';
 
 		$this->assertEquals(
-			$expected,
-			$this->Nokogiri->cut($xml, 11)
+			new SimpleXMLElement($expected),
+			new SimpleXMLElement($this->Nokogiri->cut($xml, 11))
 		);
 
 		$xml = '<p>Lorem<br/> ipsum dolor sit amet</p>';
 		$expected = '<p>Lorem<br/> ipsum</p>';
 
 		$this->assertEquals(
-			$expected,
-			$this->Nokogiri->cut($xml, 11)
+			new SimpleXMLElement($expected),
+			new SimpleXMLElement($this->Nokogiri->cut($xml, 11))
 		);
 	}
 
@@ -116,9 +116,11 @@ XML;
 				<w:t xml:space="preserve">lorem</w:t></w:r>
 XML;
 
+		// the "w" namespace in not defined, but don't quite care here, hence
+		// the use of LIBXML_NOERROR
 		$this->assertEquals(
-			$expected,
-			$this->Nokogiri->cut($xml, 5)
+			new SimpleXMLElement($expected, LIBXML_NOERROR),
+			new SimpleXMLElement($this->Nokogiri->cut($xml, 5), LIBXML_NOERROR)
 		);
 	}
 }
