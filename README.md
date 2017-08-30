@@ -45,6 +45,17 @@ Would return:
 
 Note that the blank characters between tags are not taken into account.
 
+Contributing
+------
+
+### Installation
+
+Clone the project and run `composer install`.
+
+### Running tests
+
+Run tests with `composer run-script test`.
+
 Notes
 -----
 
