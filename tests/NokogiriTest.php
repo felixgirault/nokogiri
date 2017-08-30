@@ -77,6 +77,32 @@ XML;
 	/**
 	 *
 	 */
+	public function testCutEllipsis() {
+		$xml = '<p>This <em>is</em> a text that should not have any dots added</p>';
+		$expected = '<p>This <em>is</em> a text that should not have any dots added</p>';
+		$this->assertEquals(
+			$expected,
+			$this->Nokogiri->cut($xml, 200, true, '…')
+		);
+
+		$xml = '<p>This <em>is</em> a text that should have dots added</p>';
+		$expected = '<p>This <em>is</em> a text…</p>';
+		$this->assertEquals(
+			$expected,
+			$this->Nokogiri->cut($xml, 13, true, '…')
+		);
+
+		$xml = '<p><span>Text</span></p>';
+		$expected = '<p><span>Te</span>…</p>';
+		$this->assertEquals(
+			$expected,
+			$this->Nokogiri->cut($xml, 2, true, '…')
+		);
+	}
+
+	/**
+	 *
+	 */
 	public function testCutWithAutoClosingTags() {
 		$xml = '<p>Lorem<br /> ipsum dolor sit amet</p>';
 		$expected = '<p>Lorem<br /> ipsum</p>';

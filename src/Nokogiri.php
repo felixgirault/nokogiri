@@ -14,7 +14,7 @@ class Nokogiri {
 	/**
 	 *
 	 */
-	public function cut($xml, $limit, $trim = true) {
+	public function cut($xml, $limit, $trim = true, $ellipsis = null) {
 		$Parser = new Parser();
 		$opened = [];
 		$count = 0;
@@ -63,17 +63,20 @@ class Nokogiri {
 		$Parser->parse($xml);
 
 		return $position
-			? $this->_enclose($xml, $position, $opened)
+			? $this->_enclose($xml, $position, $opened, $ellipsis)
 			: $xml;
 	}
 
 	/**
 	 *
 	 */
-	protected function _enclose($xml, $position, $tags) {
+	protected function _enclose($xml, $position, $tags, $ellipsis = null) {
 		$xml = substr($xml, 0, $position);
 
 		while ($tag = array_pop($tags)) {
+			if ($ellipsis && count($tags) === 0) {
+				$xml .= $ellipsis;
+			}
 			$xml .= "</$tag>";
 		}
 
