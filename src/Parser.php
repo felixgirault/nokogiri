@@ -34,6 +34,9 @@ class Parser {
 	const PARSING_SELF_CLOSING_TAG = 4;
 
 	//
+	const PARSING_ATTRIBUTE_VALUE = 5 ;
+
+	//
 	protected $_observers = [];
 
 	//
@@ -44,6 +47,9 @@ class Parser {
 
 	//
 	protected $_tagName = '';
+
+	//
+	protected $_attributeQuoteChar = '';
 
 	//
 	protected $_state = self::PARSING_TAG_CONTENTS;
@@ -96,6 +102,10 @@ class Parser {
 				case self::PARSING_SELF_CLOSING_TAG:
 					$this->_parseSelfClosingTag($char);
 					break;
+
+				case self::PARSING_ATTRIBUTE_VALUE:
+					$this->_parseAttributeValue($char);
+					break;
 			}
 
 			if (!$this->_continue) {
@@ -138,6 +148,12 @@ class Parser {
 	 */
 	protected function _parseTagAttributes($char) {
 		switch ($char) {
+			case '"':
+			case '\'':
+				$this->_attributeQuoteChar = $char;
+				$this->_state = self::PARSING_ATTRIBUTE_VALUE;
+				break;
+
 			case '/':
 				$this->_state = self::PARSING_SELF_CLOSING_TAG;
 				break;
@@ -146,6 +162,18 @@ class Parser {
 				$this->_state = self::PARSING_TAG_CONTENTS;
 				$this->_emit(self::OPENED_TAG_EVENT, $this->_tagName);
 				$this->_tagName = '';
+				break;
+		}
+	}
+
+	/**
+	 * we are in an attribute value: don't parse anything here
+	 * just go back to the attributes parsing function when not in the value anymore
+	 */
+	protected function _parseAttributeValue($char) {
+		switch ($char) {
+			case $this->_attributeQuoteChar:
+				$this->_state = self::PARSING_TAG_ATTRIBUTES;
 				break;
 		}
 	}

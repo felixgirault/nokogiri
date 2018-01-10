@@ -121,6 +121,30 @@ XML;
 		);
 	}
 
+	public function testAttributeValues() {
+		$html = <<<HTML
+			<p><a href="www.attribu.te/with/slash">this is a link</a></p>
+HTML;
+		$expected = <<<HTML
+			<p><a href="www.attribu.te/with/slash">this</a></p>
+HTML;
+		$this->assertEquals(
+			$expected,
+			$this->Nokogiri->cut($html, 4, true)
+		);
+
+		$html = <<<HTML
+			<p><a title='simple quotes' aria-label="double quotes">this is a link</a></p>
+HTML;
+		$expected = <<<HTML
+			<p><a title='simple quotes' aria-label="double quotes">this</a></p>
+HTML;
+		$this->assertEquals(
+			$expected,
+			$this->Nokogiri->cut($html, 4, true)
+		);
+	}
+
 	/**
 	 *
 	 */
