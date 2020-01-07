@@ -57,14 +57,14 @@ class Parser {
 	/**
 	 *
 	 */
-	public function on($event, callable $callback) {
+	public function on(int $event, callable $callback): void {
 		$this->_observers[$event] = $callback;
 	}
 
 	/**
 	 *
 	 */
-	protected function _emit($event) {
+	protected function _emit(int $event): void {
 		if (isset($this->_observers[$event])) {
 			$continue = call_user_func_array(
 				$this->_observers[$event],
@@ -78,7 +78,7 @@ class Parser {
 	/**
 	 *
 	 */
-	public function parse($xml) {
+	public function parse(string $xml): void {
 		for ($i = 0; $i < strlen($xml); $i++) {
 			$char = $xml[$i];
 
@@ -117,7 +117,7 @@ class Parser {
 	/**
 	 *
 	 */
-	protected function _parseOpeningTag($char) {
+	protected function _parseOpeningTag(string $char): void {
 		switch ($char) {
 			case '/':
 				$this->_state = empty($this->_tagName)
@@ -146,7 +146,7 @@ class Parser {
 	/**
 	 *
 	 */
-	protected function _parseTagAttributes($char) {
+	protected function _parseTagAttributes(string $char): void {
 		switch ($char) {
 			case '"':
 			case '\'':
@@ -170,7 +170,7 @@ class Parser {
 	 * we are in an attribute value: don't parse anything here
 	 * just go back to the attributes parsing function when not in the value anymore
 	 */
-	protected function _parseAttributeValue($char) {
+	protected function _parseAttributeValue(string $char): void {
 		switch ($char) {
 			case $this->_attributeQuoteChar:
 				$this->_state = self::PARSING_TAG_ATTRIBUTES;
@@ -181,7 +181,7 @@ class Parser {
 	/**
 	 *
 	 */
-	protected function _parseTagContents($char, $i) {
+	protected function _parseTagContents(string $char, int $i): void {
 		switch ($char) {
 			case '<':
 				$this->_state = self::PARSING_OPENING_TAG;
@@ -198,7 +198,7 @@ class Parser {
 	/**
 	 *
 	 */
-	protected function _parseClosingTag($char) {
+	protected function _parseClosingTag(string $char): void {
 		switch ($char) {
 			case '>':
 				$this->_state = self::PARSING_TAG_CONTENTS;
@@ -211,7 +211,7 @@ class Parser {
 	/**
 	 *
 	 */
-	protected function _parseSelfClosingTag($char) {
+	protected function _parseSelfClosingTag(string $char): void {
 		switch ($char) {
 			case '>':
 				$this->_state = self::PARSING_TAG_CONTENTS;

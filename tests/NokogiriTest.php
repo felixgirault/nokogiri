@@ -15,14 +15,14 @@ class NokogiriTest extends TestCase {
 	/**
 	 *
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		$this->Nokogiri = new Nokogiri\Nokogiri();
 	}
 
 	/**
 	 *
 	 */
-	public function testCut() {
+	public function testCut(): void {
 		$xml = <<<XML
 			<p>
 				<span class="a">Text</span>
@@ -51,7 +51,7 @@ XML;
 	/**
 	 *
 	 */
-	public function testCutWithoutTrimming() {
+	public function testCutWithoutTrimming(): void {
 		$xml = '<p> <span> Text</span></p>';
 		$expected = '<p> <span> Te</span></p>';
 
@@ -64,7 +64,7 @@ XML;
 	/**
 	 *
 	 */
-	public function testCutWithTextNode() {
+	public function testCutWithTextNode(): void {
 		$xml = '<p>This <em>is</em> a text node</p>';
 		$expected = '<p>This <em>is</em> a</p>';
 
@@ -77,7 +77,7 @@ XML;
 	/**
 	 *
 	 */
-	public function testCutEllipsis() {
+	public function testCutEllipsis(): void {
 		$xml = '<p>This <em>is</em> a text that should not have any dots added</p>';
 		$expected = '<p>This <em>is</em> a text that should not have any dots added</p>';
 		$this->assertEquals(
@@ -103,7 +103,7 @@ XML;
 	/**
 	 *
 	 */
-	public function testCutWithAutoClosingTags() {
+	public function testCutWithAutoClosingTags(): void {
 		$xml = '<p>Lorem<br /> ipsum dolor sit amet</p>';
 		$expected = '<p>Lorem<br /> ipsum</p>';
 
@@ -121,7 +121,7 @@ XML;
 		);
 	}
 
-	public function testAttributeValues() {
+	public function testAttributeValues(): void {
 		$html = <<<HTML
 			<p><a href="www.attribu.te/with/slash">this is a link</a></p>
 HTML;
@@ -148,7 +148,7 @@ HTML;
 	/**
 	 *
 	 */
-	public function testDocx() {
+	public function testDocx(): void {
 		$xml = <<<XML
 			<w:r>
 				<w:rPr>
